@@ -1,0 +1,36 @@
+#workflow
+#triggers
+#jobs
+#runners
+#steps
+#actions/tasks
+
+
+
+
+name: Build Applications
+
+on:
+ #push,pull_request
+ push:
+ branches:
+ - !main
+ branches-ignore: [main]
+ pull_request:
+
+ jobs:
+ run-tests:
+ runs-on: ubuntu-latest #macos-latest
+ steps:
+ - uses: actions/checkout@v3
+ - uses: amos/hello@v1
+ - run: ./gradlew assembleDebug
+
+ - uses: slack/notifications
+   with:
+   greets
+
+deployment:
+needs:run-tests
+ runs-on:ubuntu
+
