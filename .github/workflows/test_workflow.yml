@@ -1,4 +1,4 @@
-name: FastAPI Backend CI
+name: FastAPI Backend Tests
 
 on:
   push:
@@ -7,45 +7,23 @@ on:
 
 jobs:
   test:
-    name: Run Tests and Checks
+    name: Run Tests
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.x'  # Define your Python version
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          
-      - name: Linting Check
-        run: |
-          flake8  # Adjust to your preferred linting tool
+          pip install -r requirements.txt  # If you have a requirements file
 
-      - name: Static Type Checking
+      - name: Run Tests
         run: |
-          mypy your_project  # Adjust to your project structure
-
-      - name: Test with Coverage
-        run: |
-          pytest --cov=workflowdemo tests/  # Adjust your test folder
-
-      - name: Cache Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-
-      - name: Post-Test Actions
-        run: |
-          # Add any additional post-test actions here
+          pytest tests/  # Adjust the test folder or command based on your setup
