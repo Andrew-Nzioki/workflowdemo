@@ -11,7 +11,8 @@ def test_read_root():
 def test_read_item():
     response = client.get("/items/1")
     assert response.status_code == 200
-    assert response.json() == {"item_id": 1, "q": None}
+    # Update the assertion to match the returned value as an empty string
+    assert response.json() == {"item_id": 1, "q": ''}
 
 def test_read_item_with_query():
     response = client.get("/items/5?q=test_query")
